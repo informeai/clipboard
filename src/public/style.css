@@ -12,7 +12,8 @@
 }
 body {
   background-color: var(--body-color);
-  overflow: hidden;
+  overflow-x: hidden;
+  height: 100vh;
 }
 #container {
   display: flex;
@@ -23,6 +24,10 @@ body {
 /* HEADER */
 header {
   display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   max-height: 3.12rem;
   justify-content: space-between;
   transition: 0.3s;
