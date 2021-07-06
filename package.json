@@ -3,7 +3,7 @@
   "author": "Wellington Gadelha",
   "description": "Facilitating application to search for pre-saved texts or codes for pasting directly from the clipboard.",
   "version": "1.0.0",
-  "main": "main.js",
+  "main": "src/main.js",
   "license": "MIT",
   "scripts": {
     "start":"electron ."

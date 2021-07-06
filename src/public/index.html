@@ -5,10 +5,116 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clipboard</title>
+    <style>
+      :root {
+        --background-color: #f9f9f9;
+        --primary-color: #0070ff;
+        --secondary-color: #ff008c;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: var(--background-color);
+        overflow: hidden;
+      }
+      #container {
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        display: flex;
+        max-height: 3.12rem;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--primary-color);
+      }
+      div#add {
+        padding: 0.5rem;
+        cursor: pointer;
+      }
+      div#add svg path {
+        fill: var(--background-color);
+      }
+      #input {
+        position: relative;
+        display: flex;
+        height: 3.12rem;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        line-height: auto;
+        padding: 0.5rem;
+        background-color: var(--background-color);
+      }
+      #input svg {
+        line-height: 1rem;
+        margin: 0 0.2rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        cursor: pointer;
+      }
+      #input svg path {
+        fill: var(--primary-color);
+      }
+      #input input {
+        height: 3.12rem;
+        width: 100%;
+        border: none;
+        background-color: transparent;
+        font-size: 2rem;
+        outline: none;
+        color: var(--primary-color);
+      }
+    </style>
   </head>
   <body>
     <section id="container">
-      <header></header>
+      <header>
+        <div id="add">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="24 / basic / plus">
+              <path
+                id="icon"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M13 11H22V13H13V22H11V13H2V11H11V2H13V11Z"
+                fill="black"
+              />
+            </g>
+          </svg>
+        </div>
+        <div id="input">
+          <div id="search">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="24 / basic / search">
+                <path
+                  id="icon"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 11.8487 17.3729 13.551 16.3199 14.9056L21.7071 20.2929L20.2929 21.7071L14.9056 16.3199C13.551 17.3729 11.8487 18 10 18ZM16 10C16 13.3137 13.3137 16 10 16C6.68629 16 4 13.3137 4 10C4 6.68629 6.68629 4 10 4C13.3137 4 16 6.68629 16 10Z"
+                  fill="black"
+                />
+              </g>
+            </svg>
+          </div>
+          <input type="text" id="input-text" />
+        </div>
+      </header>
       <main></main>
     </section>
   </body>

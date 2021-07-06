@@ -8,15 +8,13 @@ function createWindow() {
     center: true
   })
 
-  win.loadFile(__dirname + '/src/public/index.html')
+  win.loadFile(__dirname + '/public/index.html')
 }
 
-
-app.whenReady()
-.then(createWindow)
-.catch(err) {
-  console.log(err)
-}
+app
+  .whenReady()
+  .then(createWindow)
+  .catch(err => console.log(err))
 
 // Evente Windows closeds
 app.on('window-all-closed', function () {
