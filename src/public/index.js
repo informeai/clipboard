@@ -1,10 +1,8 @@
 window.onload = function () {
   const { ipcRenderer } = require('electron')
-  let arrText = []
   let list = document.getElementById('list')
   let addText = document.getElementById('add-text')
   addValuesStore(ipcRenderer, addText, list)
-  listText(ipcRenderer, list, addText)
 
   function addValuesStore(ipcRenderer, addText, list) {
     let add = document.getElementById('add')
@@ -13,7 +11,10 @@ window.onload = function () {
     let textTextArea = document.querySelector('#text textarea')
     let textSvg = document.querySelector('#text svg')
     let confirm = document.getElementById('confirm')
-
+    // Initial load
+    if (!add.classList.contains('active')) {
+      listText(ipcRenderer, list, addText)
+    }
     // Event of click in Add
     add.onclick = function (event) {
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -22,6 +23,8 @@ window.onload = function () {
       addText.classList.toggle('hide')
       if (this.classList.contains('active')) {
         resetClass()
+      } else {
+        listText(ipcRenderer, list, addText)
       }
     }
     // Event of inputs
@@ -98,41 +101,95 @@ window.onload = function () {
 
   function listText(ipcRenderer, list, addText) {
     let listText = document.getElementById('list-text')
-    let inputText = document.getElementById('input-text')
     let add = document.getElementById('add')
-    // Event focus in inputText
-    inputText.addEventListener('focus', function (e) {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      list.classList.remove('hide')
-      add.classList.remove('active')
-      addText.classList.add('hide')
-      addLi(listText)
-    })
+
+    // reset class
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    list.classList.remove('hide')
+    add.classList.remove('active')
+    addText.classList.add('hide')
+    addLi(listText)
 
     // Add li in ul
     function addLi(listText) {
       ipcRenderer.send('get-store')
       ipcRenderer.on('get-store-reply', function (event, args) {
-        console.log(args)
         listText.innerHTML = ''
-        // listText.map(function (el) {
-        //   listText.removeChild(el)
-        // })
-        args.map(function (element) {
-          let li = createElement(element)
-          listText.appendChild(li)
-        })
+        if (args.length > 0) {
+          args.map(function (element) {
+            let li = createElement(element)
+            listText.appendChild(li)
+          })
+        }
       })
     }
 
     // Create li
     function createElement(objText) {
+      // Create elements
       let li = document.createElement('li')
       let span = document.createElement('span')
-      span.innerText = objText.text
+      let eye = document.createElement('img')
+      let copy = document.createElement('img')
+      let trash = document.createElement('img')
+      copy.src = './img/copy.png'
+      copy.alt = 'copiar'
+      eye.src = './img/eye.png'
+      eye.alt = 'visualizar'
+      trash.src = './img/trash.png'
+      trash.alt = 'deletar'
+      // Events editables
+      copyText(copy, objText.text)
+      viewText(eye, objText.text)
+      deleteLi(trash, li, objText.title)
+      // Append elements
+      span.appendChild(copy)
+      span.appendChild(eye)
+      span.appendChild(trash)
       li.innerText = objText.title
       li.appendChild(span)
       return li
+    }
+    // Add event modal view
+    function viewText(eye, text) {
+      let modal = document.getElementById('modal')
+      eye.addEventListener('mouseover', function () {
+        modal.innerHTML = ''
+        modal.innerHTML = text
+        modal.classList.toggle('hide')
+      })
+      eye.addEventListener('mouseout', function () {
+        modal.innerHTML = ''
+        modal.classList.toggle('hide')
+      })
+    }
+    // Delete li
+    function deleteLi(trash, li, title) {
+      trash.addEventListener('click', function () {
+        li.parentNode.removeChild(li)
+        ipcRenderer.send('delete-store', title)
+      })
+    }
+    // Copy text for area transfer
+    function copyText(copy, text) {
+      let toggle = document.getElementById('toggle')
+
+      copy.addEventListener('click', function () {
+        // send area trasnfer
+        toggle.innerHTML = ''
+        navigator.clipboard.writeText(text).then(
+          function () {
+            toggle.innerHTML = 'Copied'
+          },
+          function (err) {
+            toggle.innerHTML = 'Error'
+          }
+        )
+        toggle.classList.remove('hide')
+        setTimeout(function () {
+          toggle.classList.add('hide')
+        }, 1000)
+      })
     }
   }
 }

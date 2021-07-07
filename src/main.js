@@ -1,13 +1,17 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-// const { path } = require('path')
 const fs = require('fs')
 
 let win
 function createWindow() {
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 500,
+    height: 500,
+    minWidth: 500,
+    minHeight: 500,
+    maxWidth: 800,
+    maxHeight: 600,
     center: true,
+    maximizable: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -16,8 +20,6 @@ function createWindow() {
   })
 
   win.loadFile(__dirname + '/public/index.html')
-
-  win.webContents.openDevTools()
 }
 
 app
@@ -25,6 +27,7 @@ app
   .then(createWindow)
   .then(getStore)
   .then(saveStore)
+  .then(deleteStore)
   .catch(err => console.log(err))
 
 // Evente Windows closeds
@@ -42,7 +45,6 @@ function getStore() {
     let data = JSON.parse(
       fs.readFileSync(`${__dirname}/database/store.json`, 'utf-8')
     )
-    console.log(data)
     event.reply('get-store-reply', data)
   })
 }
@@ -55,6 +57,16 @@ function saveStore() {
       `${__dirname}/database/store.json`,
       JSON.stringify(arrData)
     )
-    console.log(arrData.length)
+  })
+}
+function deleteStore() {
+  ipcMain.on('delete-store', function (event, title) {
+    newArr = []
+    let data = JSON.parse(
+      fs.readFileSync(`${__dirname}/database/store.json`, 'utf-8')
+    )
+    data = data.filter(d => d.title != title)
+    newArr = newArr.concat(data)
+    fs.writeFileSync(`${__dirname}/database/store.json`, JSON.stringify(newArr))
   })
 }
